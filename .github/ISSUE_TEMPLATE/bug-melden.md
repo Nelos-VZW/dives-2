@@ -1,7 +1,7 @@
 ---
 name: Bug melden
 about: Maak een nieuwe bug aan zodanig dat we die kunnen opnemen
-title: ''
+title: "[BUG] Geef de bug een naam"
 labels: triage
 assignees: ndsmyter
 

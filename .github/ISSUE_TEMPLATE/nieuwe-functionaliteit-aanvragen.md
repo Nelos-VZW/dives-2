@@ -1,7 +1,7 @@
 ---
 name: Nieuwe functionaliteit aanvragen
 about: Stel een nieuwe functionaliteit voor aan het project
-title: "[Feature]"
+title: "[Feature] Geef de nieuwe functionaliteit een naam"
 labels: triage
 assignees: ndsmyter
 

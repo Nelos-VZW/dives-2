@@ -10,8 +10,7 @@ assignees: ndsmyter
 **Beschrijf de bug**
 Je kan hier een korte en bondige beschrijving geven van de bug.
 
-**Stappen om te reporduceren**
-De stappen om de bug te reproduceren:
+**Stappen om te reproduceren**
 1. Ga naar '...'
 2. Klik op '...'
 3. Scroll naar '...'
@@ -23,16 +22,16 @@ Je kan hier een korte en bondige beschrijving geven van wat er had moeten gebeur
 **Screenshots**
 Indien mogelijk, kan je hier screenshots geven van wat er gebeurde.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+**Desktop (indien mogelijk aanvullen):**
+ - Besturingssysteem: [bv iOS]
+ - Browser: [bv chrome, safari]
+ - Versie: [bv. 22]
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+**Smartphone (indien mogelijk aanvullen):**
+ - Toestel: [bv iPhone6]
+ - Besturingssysteem: [bv iOS8.1]
+ - Browser [bv standaard browser, safari]
+ - Versie [bv 22]
 
-**Additional context**
-Add any other context about the problem here.
+**Extra informatie**
+Voeg alle extra informatie die je nog bedenkt hier gerust toe

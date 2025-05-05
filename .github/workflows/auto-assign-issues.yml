@@ -1,0 +1,62 @@
+name: Automatic assign of new Issues
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  auto-assign:
+    name: Assign Milestone and Project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign Milestone
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
+          MILESTONE_NUMBER: "4"
+        run: |
+          # Fetch the internal database ID for the milestone based on its number
+          MILESTONE_ID=$(gh api graphql -f query='
+            query($repoOwner: String!, $repoName: String!, $milestoneNumber: Int!) {
+              repository(owner: $repoOwner, name: $repoName) {
+                milestone(number: $milestoneNumber) {
+                  id
+                }
+              }
+            }' -f repoOwner='${{ github.repository_owner }}' -f repoName='${{ github.event.repository.name }}' -f milestoneNumber=$MILESTONE_NUMBER --jq '.data.repository.milestone.id')
+
+          if [ "$MILESTONE_ID" = "null" ] || [ -z "$MILESTONE_ID" ]; then
+            echo "Milestone number $MILESTONE_NUMBER not found."
+            exit 1
+          fi
+
+          # Update the issue using the Milestone's Node ID
+          gh api graphql -f query='
+            mutation($issueId: ID!, $milestoneId: ID!) {
+              updateIssue(input: {id: $issueId, milestoneId: $milestoneId}) {
+                clientMutationId
+              }
+            }' -f issueId="$ISSUE_NODE_ID" -f milestoneId="$MILESTONE_ID" --silent
+
+          echo "Assigned issue #${{ github.event.issue.number }} to milestone number $MILESTONE_NUMBER"
+
+      - name: Set Project
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
+          PROJECT_ID: "2"
+        run: |
+          # Add the issue to the project
+          ITEM_ID=$(gh api graphql -f query='
+            mutation($projectId: ID!, $contentId: ID!) {
+              addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
+                item {
+                  id
+                }
+              }
+            }' -f projectId="$PROJECT_ID" -f contentId="$ISSUE_NODE_ID" --jq '.data.addProjectV2ItemById.item.id')
+
+          echo "Added issue #${{ github.event.issue.number }} to project $PROJECT_ID. New item ID: $ITEM_ID"

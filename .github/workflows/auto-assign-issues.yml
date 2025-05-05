@@ -26,7 +26,7 @@ jobs:
                   id
                 }
               }
-            }' -f repoOwner='${{ github.repository_owner }}' -f repoName='${{ github.event.repository.name }}' -f milestoneNumber=$MILESTONE_NUMBER --jq '.data.repository.milestone.id')
+            }' -f repoOwner='${{ github.repository_owner }}' -f repoName='${{ github.event.repository.name }}' -F milestoneNumber=$MILESTONE_NUMBER --jq '.data.repository.milestone.id')
 
           if [ "$MILESTONE_ID" = "null" ] || [ -z "$MILESTONE_ID" ]; then
             echo "Milestone number $MILESTONE_NUMBER not found."

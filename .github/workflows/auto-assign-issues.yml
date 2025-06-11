@@ -16,7 +16,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
-          MILESTONE_NUMBER: "4"
+          MILESTONE_NUMBER: "6"
         run: |
           # Fetch the internal database ID for the milestone based on its number
           MILESTONE_ID=$(gh api graphql -f query='
@@ -49,6 +49,15 @@ jobs:
           ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
           PROJECT_ID: "2"
         run: |
+          # Fetch the internal database ID for the project based on its number
+          PROJECT_NODE_ID=$(gh api graphql -f query='
+            query {
+              organization(login: "Nelos-VZW") {
+                projectV2(number: $PROJECT_ID) {
+                  id
+                }
+              }
+            }' --jq '.data.organization.projectV2.id')
           # Add the issue to the project
           ITEM_ID=$(gh api graphql -f query='
             mutation($projectId: ID!, $contentId: ID!) {
@@ -57,6 +66,6 @@ jobs:
                   id
                 }
               }
-            }' -f projectId="$PROJECT_ID" -f contentId="$ISSUE_NODE_ID" --jq '.data.addProjectV2ItemById.item.id')
+            }' -f projectId="$PROJECT_NODE_ID" -f contentId="$ISSUE_NODE_ID" --jq '.data.addProjectV2ItemById.item.id')
 
           echo "Added issue #${{ github.event.issue.number }} to project $PROJECT_ID. New item ID: $ITEM_ID"

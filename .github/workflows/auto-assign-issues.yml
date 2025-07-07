@@ -57,7 +57,7 @@ jobs:
                   id
                 }
               }
-            }' -f projectNumber=$PROJECT_ID --jq '.data.organization.projectV2.id')
+            }' -F projectNumber=$PROJECT_ID --jq '.data.organization.projectV2.id')
           # Add the issue to the project
           ITEM_ID=$(gh api graphql -f query='
             mutation($projectId: ID!, $contentId: ID!) {

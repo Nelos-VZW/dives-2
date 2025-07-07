@@ -51,7 +51,7 @@ jobs:
         run: |
           # Fetch the internal database ID for the project based on its number
           PROJECT_NODE_ID=$(gh api graphql -f query='
-            query {
+            query ($projectNumber: Int!) {
               organization(login: "Nelos-VZW") {
                 projectV2(number: $projectNumber) {
                   id

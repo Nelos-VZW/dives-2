@@ -53,11 +53,11 @@ jobs:
           PROJECT_NODE_ID=$(gh api graphql -f query='
             query {
               organization(login: "Nelos-VZW") {
-                projectV2(number: $PROJECT_ID) {
+                projectV2(number: $projectNumber) {
                   id
                 }
               }
-            }' --jq '.data.organization.projectV2.id')
+            }' -f projectNumber=$PROJECT_ID --jq '.data.organization.projectV2.id')
           # Add the issue to the project
           ITEM_ID=$(gh api graphql -f query='
             mutation($projectId: ID!, $contentId: ID!) {

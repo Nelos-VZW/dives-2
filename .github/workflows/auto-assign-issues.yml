@@ -47,7 +47,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
-          PROJECT_ID: "2"
+          PROJECT_ID: 2
         run: |
           # Fetch the internal database ID for the project based on its number
           PROJECT_NODE_ID=$(gh api graphql -f query='

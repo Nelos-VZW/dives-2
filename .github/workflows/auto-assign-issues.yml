@@ -47,25 +47,23 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
-          PROJECT_ID: 2
+          PROJECT_NR: 2
+          ORG: Nelos-VZW
         run: |
-          # Fetch the internal database ID for the project based on its number
-          PROJECT_NODE_ID=$(gh api graphql -f query='
-            query ($projectNumber: Int!) {
-              organization(login: "Nelos-VZW") {
-                projectV2(number: $projectNumber) {
-                  id
-                }
-              }
-            }' -F projectNumber=$PROJECT_ID --jq '.data.organization.projectV2.id')
-          # Add the issue to the project
-          ITEM_ID=$(gh api graphql -f query='
-            mutation($projectId: ID!, $contentId: ID!) {
-              addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
-                item {
-                  id
-                }
-              }
-            }' -f projectId="$PROJECT_NODE_ID" -f contentId="$ISSUE_NODE_ID" --jq '.data.addProjectV2ItemById.item.id')
-
-          echo "Added issue #${{ github.event.issue.number }} to project $PROJECT_ID. New item ID: $ITEM_ID"
+          # Get the project ID for the classic project
+          PROJECT_ID=$(gh api orgs/$ORG/projects --preview=inertia --jq ".[] | select(.number==$PROJECT_NUMBER) | .id")
+          if [ -z "$PROJECT_ID" ]; then
+            echo "Project number $PROJECT_NUMBER not found."
+            exit 1
+          fi
+      
+          # Get the first column ID (or specify the desired column name/ID)
+          COLUMN_ID=$(gh api orgs/$ORG/projects/$PROJECT_ID/columns --preview=inertia --jq ".[0].id")
+          if [ -z "$COLUMN_ID" ]; then
+            echo "No columns found in project."
+            exit 1
+          fi
+      
+          # Add the issue to the column
+          gh api projects/columns/$COLUMN_ID/cards --preview=inertia -f content_type="Issue" -f content_url="$ISSUE_URL"
+          echo "Added issue to classic project $PROJECT_NUMBER, column $COLUMN_ID."

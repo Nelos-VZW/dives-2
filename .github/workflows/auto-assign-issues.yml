@@ -43,27 +43,27 @@ jobs:
 
           echo "Assigned issue #${{ github.event.issue.number }} to milestone number $MILESTONE_NUMBER"
 
-      - name: Set Project
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
-          PROJECT_NR: 2
-          ORG: Nelos-VZW
-        run: |
-          # Get the project ID for the classic project
-          PROJECT_ID=$(gh api orgs/$ORG/projects --preview=inertia --jq ".[] | select(.number==$PROJECT_NUMBER) | .id")
-          if [ -z "$PROJECT_ID" ]; then
-            echo "Project number $PROJECT_NUMBER not found."
-            exit 1
-          fi
-      
-          # Get the first column ID (or specify the desired column name/ID)
-          COLUMN_ID=$(gh api orgs/$ORG/projects/$PROJECT_ID/columns --preview=inertia --jq ".[0].id")
-          if [ -z "$COLUMN_ID" ]; then
-            echo "No columns found in project."
-            exit 1
-          fi
-      
-          # Add the issue to the column
-          gh api projects/columns/$COLUMN_ID/cards --preview=inertia -f content_type="Issue" -f content_url="$ISSUE_URL"
-          echo "Added issue to classic project $PROJECT_NUMBER, column $COLUMN_ID."
+#      - name: Set Project
+#        env:
+#          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
+#          PROJECT_NR: 2
+#          ORG: Nelos-VZW
+#        run: |
+#          # Get the project ID for the classic project
+#          PROJECT_ID=$(gh api orgs/$ORG/projects --preview=inertia --jq ".[] | select(.number==$PROJECT_NUMBER) | .id")
+#          if [ -z "$PROJECT_ID" ]; then
+#            echo "Project number $PROJECT_NUMBER not found."
+#            exit 1
+#          fi
+#      
+#          # Get the first column ID (or specify the desired column name/ID)
+#          COLUMN_ID=$(gh api orgs/$ORG/projects/$PROJECT_ID/columns --preview=inertia --jq ".[0].id")
+#          if [ -z "$COLUMN_ID" ]; then
+#            echo "No columns found in project."
+#            exit 1
+#          fi
+#      
+#          # Add the issue to the column
+#          gh api projects/columns/$COLUMN_ID/cards --preview=inertia -f content_type="Issue" -f content_url="$ISSUE_URL"
+#          echo "Added issue to classic project $PROJECT_NUMBER, column $COLUMN_ID."

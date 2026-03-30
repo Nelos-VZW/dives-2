@@ -16,7 +16,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
-          MILESTONE_NUMBER: "6"
+          MILESTONE_NUMBER: "9"
         run: |
           # Fetch the internal database ID for the milestone based on its number
           MILESTONE_ID=$(gh api graphql -f query='
